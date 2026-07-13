@@ -1,0 +1,33 @@
+# ============================================================
+#  Nutrition Agent — Python Dependencies
+#  Tested with Python 3.10 – 3.14
+# ============================================================
+
+# Web Framework
+Flask==3.0.3
+Werkzeug==3.0.3
+
+# IBM Watsonx.ai SDK  (latest versions with Python 3.12+ wheel support)
+ibm-watsonx-ai==1.5.14
+ibm-cloud-sdk-core==3.25.0
+
+# Environment Variable Management
+python-dotenv==1.0.1
+
+# HTTP Requests — intentionally unpinned; ibm-watsonx-ai resolves the
+# compatible version at install time (currently pulls requests>=2.34)
+requests
+urllib3
+
+# JSON handling helpers
+jsonschema==4.23.0
+
+# Utility
+python-dateutil==2.9.0
+
+# Production WSGI Server
+# NOTE: gunicorn is Linux/macOS only.
+# On Windows use waitress instead:
+#   pip install waitress
+#   waitress-serve --port=5000 app:app
+waitress==3.0.1

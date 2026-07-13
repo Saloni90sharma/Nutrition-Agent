@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}NutriBot — Chat with Your AI Nutritionist{% endblock %}
+
+{% block content %}
+<div class="container-fluid h-100 p-0">
+  <div class="chat-layout">
+
+    <!-- ═══════════  LEFT SIDEBAR  ═══════════ -->
+    <aside class="chat-sidebar" id="chatSidebar">
+      <div class="sidebar-inner">
+
+        <!-- Profile Card -->
+        <div class="profile-card" id="profileCard">
+          <div class="profile-avatar" id="profileAvatar">🥗</div>
+          <div class="profile-info">
+            <div class="profile-name" id="profileName">Guest User</div>
+            <div class="profile-goal" id="profileGoal">Set up your profile</div>
+          </div>
+          <button class="btn btn-sm btn-outline-primary ms-auto" data-bs-toggle="modal" data-bs-target="#profileModal">
+            <i class="bi bi-pencil-fill"></i>
+          </button>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row" id="statsRow">
+          <div class="stat-chip"><span id="statBMI">—</span><small>BMI</small></div>
+          <div class="stat-chip"><span id="statCals">—</span><small>Target kcal</small></div>
+          <div class="stat-chip"><span id="statDiet">—</span><small>Diet</small></div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="sidebar-section">
+          <div class="section-label">Quick Actions</div>
+          <div class="d-flex flex-column gap-2">
+            <button class="btn btn-quick" onclick="location.href='/meal-plan'">
+              <i class="bi bi-calendar3-week-fill me-2 text-success"></i>Generate Meal Plan
+            </button>
+            <button class="btn btn-quick" onclick="location.href='/bmi'">
+              <i class="bi bi-speedometer2 me-2 text-warning"></i>Check BMI
+            </button>
+            <button class="btn btn-quick" onclick="location.href='/nutrition'">
+              <i class="bi bi-pie-chart-fill me-2 text-info"></i>Calorie Analyzer
+            </button>
+            <button class="btn btn-quick" onclick="location.href='/family'">
+              <i class="bi bi-people-fill me-2 text-purple"></i>Family Plan
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Prompts -->
+        <div class="sidebar-section">
+          <div class="section-label">Try asking…</div>
+          <div id="quickPromptsContainer" class="d-flex flex-column gap-1"></div>
+        </div>
+
+        <!-- Clear Chat -->
+        <div class="mt-auto pt-3">
+          <button class="btn btn-outline-danger w-100 btn-sm" id="clearChatBtn">
+            <i class="bi bi-trash3 me-1"></i>Clear Chat History
+          </button>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- ═══════════  CHAT MAIN  ═══════════ -->
+    <div class="chat-main">
+
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <button class="btn btn-icon d-lg-none me-2" id="sidebarToggle">
+          <i class="bi bi-layout-sidebar-inset"></i>
+        </button>
+        <div class="chat-header-info">
+          <div class="chat-title">
+            <span class="status-dot online"></span>
+            NutriBot AI
+          </div>
+          <small class="text-muted">Powered by IBM Watsonx.ai · Granite</small>
+        </div>
+        <div class="ms-auto d-flex gap-2">
+          <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#profileModal">
+            <i class="bi bi-person-circle me-1"></i>
+            <span class="d-none d-md-inline">Profile</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Area -->
+      <div class="chat-messages" id="chatMessages">
+
+        <!-- Welcome Message -->
+        <div class="message assistant-message" id="welcomeMsg">
+          <div class="message-avatar">🤖</div>
+          <div class="message-content">
+            <div class="message-bubble">
+              <p class="mb-2">👋 <strong>Namaste! I'm NutriBot</strong>, your personal AI nutrition assistant powered by IBM Watsonx.ai.</p>
+              <p class="mb-2">I can help you with:</p>
+              <ul class="mb-2">
+                <li>🍱 Personalized meal plans & Indian food recommendations</li>
+                <li>🔢 Calorie & nutrient analysis</li>
+                <li>⚖️ BMI calculation & weight management advice</li>
+                <li>👨‍👩‍👧‍👦 Family nutrition planning</li>
+                <li>💊 Diet tips for diabetes, PCOS, heart health & more</li>
+              </ul>
+              <p class="mb-0">Set up your <strong>profile</strong> for personalized advice, or just start chatting! 😊</p>
+            </div>
+            <div class="message-time">Just now</div>
+          </div>
+        </div>
+
+        <!-- Dynamic messages injected here -->
+        <div id="messagesEnd"></div>
+      </div>
+
+      <!-- Typing Indicator -->
+      <div class="typing-indicator d-none" id="typingIndicator">
+        <div class="message-avatar">🤖</div>
+        <div class="typing-bubble">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="chat-input-area">
+        <div class="chat-input-wrapper">
+          <textarea
+            id="chatInput"
+            class="chat-textarea"
+            placeholder="Ask me anything about nutrition, Indian food, meal plans…"
+            rows="1"
+            maxlength="1000"
+          ></textarea>
+          <div class="input-actions">
+            <span class="char-count" id="charCount">0/1000</span>
+            <button class="btn btn-send" id="sendBtn" title="Send message">
+              <i class="bi bi-send-fill"></i>
+            </button>
+          </div>
+        </div>
+        <div class="input-hints d-none d-md-flex gap-3">
+          <span class="hint-chip" onclick="insertPrompt('What is a healthy Indian breakfast?')">🌅 Indian breakfast</span>
+          <span class="hint-chip" onclick="insertPrompt('Give me a high-protein vegetarian meal plan')">💪 High protein</span>
+          <span class="hint-chip" onclick="insertPrompt('Foods to avoid for diabetes')">🩺 Diabetes diet</span>
+          <span class="hint-chip" onclick="insertPrompt('Healthy snacks under 200 calories')">🍎 Healthy snacks</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}

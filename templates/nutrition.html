@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}NutriBot — Calorie & Nutrition Analyzer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+  <!-- Page Header -->
+  <div class="page-header mb-4">
+    <div class="d-flex align-items-center gap-3">
+      <div class="page-icon bg-info-soft"><i class="bi bi-pie-chart-fill text-info fs-3"></i></div>
+      <div>
+        <h2 class="page-title mb-0">Calorie &amp; Nutrition Analyzer</h2>
+        <p class="text-muted mb-0">Get instant nutritional breakdown for any meal or ingredient</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Input Card -->
+    <div class="col-lg-5">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="bi bi-search me-2 text-primary"></i>Analyze Your Meal
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Enter Food Items</label>
+            <textarea class="form-control" id="foodInput" rows="5"
+              placeholder="e.g.:&#10;2 rotis&#10;1 cup dal makhani&#10;1 bowl rice&#10;1 glass lassi"></textarea>
+            <small class="text-muted">List each food on a new line or separate with commas</small>
+          </div>
+
+          <!-- Common Meals Quick Select -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Or choose a common meal:</label>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-sm btn-outline-secondary meal-preset" data-meal="Idli 3 pieces, sambar 1 cup, coconut chutney 2 tbsp">🥘 Idli-Sambar</button>
+              <button class="btn btn-sm btn-outline-secondary meal-preset" data-meal="2 rotis, dal fry 1 cup, sabzi 1 cup, rice 1 bowl">🍽️ Dal-Roti</button>
+              <button class="btn btn-sm btn-outline-secondary meal-preset" data-meal="Poha 1 cup, chai 1 cup">☕ Poha-Chai</button>
+              <button class="btn btn-sm btn-outline-secondary meal-preset" data-meal="Chicken biryani 1 plate, raita 1 cup">🍗 Biryani</button>
+              <button class="btn btn-sm btn-outline-secondary meal-preset" data-meal="Masala dosa 1 piece, filter coffee 1 cup">🫓 Dosa</button>
+              <button class="btn btn-sm btn-outline-secondary meal-preset" data-meal="Paneer tikka 6 pieces, green chutney 2 tbsp">🧀 Paneer Tikka</button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary w-100" id="analyzeBtn">
+            <i class="bi bi-bar-chart-fill me-2"></i>Analyze Nutrition
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Card -->
+    <div class="col-lg-7">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-clipboard-data me-2 text-success"></i>Nutritional Analysis</span>
+          <button class="btn btn-sm btn-outline-secondary d-none" id="copyAnalysisBtn">
+            <i class="bi bi-clipboard me-1"></i>Copy
+          </button>
+        </div>
+        <div class="card-body">
+
+          <!-- Empty State -->
+          <div class="empty-state" id="nutritionEmptyState">
+            <div class="empty-icon">🔬</div>
+            <p>Enter your meal above and click <strong>Analyze</strong> to see the nutritional breakdown.</p>
+          </div>
+
+          <!-- Loading State -->
+          <div class="loading-state d-none" id="nutritionLoading">
+            <div class="spinner-grow text-primary" role="status"></div>
+            <p class="mt-3 text-muted">Analyzing nutritional content…</p>
+          </div>
+
+          <!-- Results -->
+          <div class="d-none" id="nutritionResults">
+            <!-- Macro Bars will be injected here -->
+            <div id="macroBars" class="mb-3"></div>
+            <!-- Full AI Analysis -->
+            <div class="analysis-text" id="analysisText"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Nutrition Tips Cards -->
+    <div class="col-12">
+      <h5 class="fw-bold mb-3"><i class="bi bi-lightbulb-fill text-warning me-2"></i>Nutrition Tips</h5>
+      <div class="row g-3" id="nutritionTipsRow">
+        <div class="col-sm-6 col-lg-3">
+          <div class="tip-card">
+            <div class="tip-icon">🌾</div>
+            <h6>Complex Carbs</h6>
+            <p class="small text-muted mb-0">Prefer whole wheat roti, brown rice, and millets (jowar, bajra) over refined grains.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="tip-card">
+            <div class="tip-icon">🫘</div>
+            <h6>Protein Power</h6>
+            <p class="small text-muted mb-0">Dal + rice = complete protein. Combine legumes with grains for all essential amino acids.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="tip-card">
+            <div class="tip-icon">🥬</div>
+            <h6>Eat the Rainbow</h6>
+            <p class="small text-muted mb-0">Include 5 different colored vegetables daily for a full spectrum of phytonutrients.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="tip-card">
+            <div class="tip-icon">🫙</div>
+            <h6>Fermented Foods</h6>
+            <p class="small text-muted mb-0">Curd, idli, dosa batter, and kanji support gut health and improve nutrient absorption.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/nutrition.js') }}"></script>
+{% endblock %}

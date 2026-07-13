@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}NutriBot — Family Nutrition Planner{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+  <!-- Page Header -->
+  <div class="page-header mb-4">
+    <div class="d-flex align-items-center gap-3">
+      <div class="page-icon bg-purple-soft"><i class="bi bi-people-fill text-purple fs-3"></i></div>
+      <div>
+        <h2 class="page-title mb-0">Family Nutrition Planner</h2>
+        <p class="text-muted mb-0">One meal, every family member's needs — handled together</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Add Member -->
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header"><i class="bi bi-person-plus-fill me-2 text-purple"></i>Add Family Member</div>
+        <div class="card-body">
+          <form id="addMemberForm">
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Name *</label>
+              <input type="text" class="form-control" name="name" required placeholder="e.g., Priya">
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label fw-semibold small">Age *</label>
+                <input type="number" class="form-control" name="age" required placeholder="25" min="1">
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold small">Gender</label>
+                <select class="form-select" name="gender">
+                  <option value="">Select</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Role in Family</label>
+              <select class="form-select" name="role">
+                <option value="family member">Family Member</option>
+                <option value="father">Father</option>
+                <option value="mother">Mother</option>
+                <option value="child">Child</option>
+                <option value="teenager">Teenager</option>
+                <option value="grandparent">Grandparent</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Diet Type</label>
+              <select class="form-select" name="diet_type">
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="non-vegetarian">Non-Vegetarian</option>
+                <option value="eggetarian">Eggetarian</option>
+                <option value="Jain">Jain</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Health Goal</label>
+              <input type="text" class="form-control" name="goal"
+                     placeholder="e.g., weight loss, growth">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Health Conditions</label>
+              <input type="text" class="form-control" name="health_conditions"
+                     placeholder="e.g., diabetes, allergies">
+            </div>
+            <button type="submit" class="btn btn-purple w-100">
+              <i class="bi bi-plus-circle me-2"></i>Add Member
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Family List & Plan -->
+    <div class="col-lg-8">
+
+      <!-- Family Members -->
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-people me-2"></i>Family Members (<span id="memberCount">0</span>)</span>
+          <button class="btn btn-success btn-sm" id="generateFamilyPlanBtn">
+            <i class="bi bi-magic me-1"></i>Generate Family Plan
+          </button>
+        </div>
+        <div class="card-body">
+
+          <!-- Empty State -->
+          <div id="familyEmptyState" class="empty-state">
+            <div class="empty-icon">👨‍👩‍👧‍👦</div>
+            <p>Add family members using the form to get started with a unified family meal plan.</p>
+          </div>
+
+          <!-- Members Grid -->
+          <div class="row g-3" id="familyMembersGrid"></div>
+
+        </div>
+      </div>
+
+      <!-- Family Plan Output -->
+      <div class="card d-none" id="familyPlanCard">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-journal-richtext me-2 text-success"></i>Family Meal Plan</span>
+          <button class="btn btn-sm btn-outline-secondary" id="copyFamilyPlanBtn">
+            <i class="bi bi-clipboard me-1"></i>Copy
+          </button>
+        </div>
+        <div class="card-body">
+          <!-- Loading -->
+          <div class="loading-state d-none" id="familyPlanLoading">
+            <div class="spinner-grow text-purple" role="status"></div>
+            <p class="mt-3 text-muted">Creating your family meal plan…</p>
+          </div>
+          <div class="plan-output" id="familyPlanOutput"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/family.js') }}"></script>
+{% endblock %}
